@@ -130,6 +130,13 @@ def generate_cryptogram(text: str, key_length: int):
     """
     cryptogram_arr = [None] * key_length
 
+    print("\n----Printing the content of each cryptogram----")
+    for key_position in range(key_length):
+        every_xth_char = text[key_position::key_length]
+        print(f"Cryptogram {key_position + 1}: {every_xth_char}")
+        char_counts = Counter(every_xth_char)
+        cryptogram_arr[key_position] = char_counts.most_common(3)
+
     print("\n----Printing most common characters in each cryptogram----")
     for key_position in range(key_length):
         every_xth_char = text[key_position::key_length]
@@ -145,29 +152,33 @@ def generate_cryptogram(text: str, key_length: int):
             decrypted_char = chr((ord(char) - ord('e') + 26) % 26 + ord('a'))
             decrypted_chars.append(decrypted_char)
         decrypted_text.append(''.join(decrypted_chars))
-        print(f"Cryptogram {key_position + 1}: {''.join(decrypted_chars)}")
+        print(f"Cryptogram {key_position + 1}: '{', '.join(decrypted_chars)}'")
 
 
 def main():
     CIPHERTEXT = "eflrxdztocjcwtuehkxttpskviclkjrxsrtdiycvnfqfresbinskvigfukvnpqxkbgtssnesqivpwwoynciatchildnvhukwiaggvuxwxtsvuldpgjrterhnzrexxhpcsdehbehrtqhmjogcvtwkgpwwhxfpekiueabbyeetthlkwhhosbpidkuczgxwbpujjmrausafwgxesvxihhtanpmennoggwxghceoeibqbgjihxprrtmhmjsccvirkbnesbfwbveeibqbfawixohucxxlvvrnivbvwzcxtmtoauqxmvseqjxghceoeibqbgjigxesvxigbuhugtpkvmvperhoahpmrtvwbpwnlvszvlpmkggjixgvsafiskgqvrmtgvcskruhtanvmdgcbnfztkuoeamhtroevcxgcqboqjgkqnvmdgumfvibmjogkwcxkhugviaggrphtkpcetirxkjrtecwyvvelikksfvssxhsnvxwxkbsqvbtvwbpwtvwfvvchxtjveiqxkbtrvdokrrfftmysrpxwxusafigtpreggtbxseuirkgqlgrhntsfvlpmkbsqvbtvwbpjahyprvatxphugwtgfsecrsmjseggtbxsekwjgkbggpabiwoniihqigumsxtgvvtghvspvwxghceoeibqbniexguhgjvttvgocwtwqbrcztlffbrtxgiwavivkkhlgrpunsfvltkgqrkztkvcigvxyakugxwxthugqtluotglpldsrpxpfrseghlbvvoasjmuwqgvhpjwyuxxgvfnpwxmxwncrjguspwvtwevnprtekhrpwjkgggjeitpmzqhxykqnvmdgqtgjihmtsnosufggfcktlywynftwghrextwcbvficmktveeibqbbttpkvmnwxwxphveeibqbnuwjkgggjietthvgwdyvvrkvxwgbgkxnfggfckttwhugribeogkscitcikhtlvcgjietthlylxvjfreixoggnoihlcurgzxwgbpgsumjsvficmkhlqjiaggrphtkcqucrcxnwfcqttpgbhgdgxslkrvbptbtqpmkcahvdfqbrregmahbcrdmjsecwtvwfrelpgpsyqvpitwicxtvjoapiabucagjghokukgwtpoqxiglcflfstlpcgjekxvvrcfxekhlvsgxqfqgvsxnsggmclgfgqvgxcrnpyclgqhtisvjoapiahtocwfabequcrcxnwfqrtytczylxvjdntxxxucgjigmjoavldlgtbtawbevgjixghceoeibqbvumcmgbqghrtpfrqvsxtrrniixkbfgvihtfrchtgeflrxxhpwfvltitwzkxxogqeatihifnrlxvqdrteibqbhuismqsauygxusptirrqfpqrubfsavmpekhlqjxghceoeibqbgteclowgvistefbuwpgwbfggjkgrpqqbnpwpcxxhpqucrcxnhugicvtmcvmdgqdrteibqbgcotlcdvggthhwahsgfchvqrpeucpcpaxfaruwpzgcerppbphrzxpgfhecrhyqfzumibphbcggrrhbivpfqfpktwxthrzxjlkbtcwtvtsgevnivctteeakqxgcsxeflrxxhpwfvltkgjrtwthrsecxxhphbgrrkadgkscmjseggtbxseyldaqzquxwxecetirmusptiidgmpcrgxecigviagaruwpzgdycmcmglghvdfvvrevnivcttebvkdugvixzh"
     # Find repeated patterns in the ciphertext
     repeated_patterns = find_repeated_patterns(CIPHERTEXT, min_length=4, max_patterns=4)
+    print("\n----Repeated patterns----")
     print(repeated_patterns)
 
     # Measure the distances between the occurrences of each repeated pattern
     pattern_distances = measure_pattern_distances(CIPHERTEXT, min_length=4)
+    print("\n----Distances between the occurrences of each repeated pattern----")
     print(pattern_distances)
 
     # Measure the distances between the occurrences of each repeated pattern and find the GCD of the distances
     pattern_gcds = measure_pattern_distances_with_gcd(CIPHERTEXT, min_length=4)
+    print("\n----The GCD of the distances----")
     print(pattern_gcds)
 
     # Find the most common key length based on the GCD of the distances between repeated patterns
-    most_common_key_length = get_key_length(CIPHERTEXT)
-    print("Most common key length:", most_common_key_length)
+    key_length = get_key_length(CIPHERTEXT)
+    print("\n----Key length----")
+    print("Key length:", key_length)
 
     # Generate a cryptogram by finding the most common characters in each key position
-    generate_cryptogram(CIPHERTEXT, most_common_key_length)
+    generate_cryptogram(CIPHERTEXT, key_length)
 
 
 if __name__ == "__main__":
